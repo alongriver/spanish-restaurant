@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sol y Sombra · 西班牙风味餐厅</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='27' fill='%23D9A441'/%3E%3Cpath d='M13 41 Q32 19 51 41' stroke='%231B1410' stroke-width='4.5' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='33' r='13' fill='none' stroke='%231B1410' stroke-width='3'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+<style>
+  :root{
+    --bg:#1B1410;
+    --bg2:#231A13;
+    --card:#2A1F16;
+    --gold:#D9A441;
+    --terra:#C05A2E;
+    --cream:#F4E9D8;
+    --muted:#B3A48C;
+    --line:rgba(217,164,65,.16);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Noto Sans SC',system-ui,-apple-system,'Segoe UI','Microsoft YaHei',sans-serif;
+    background:var(--bg);
+    color:var(--cream);
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .serif{font-family:'Noto Serif SC','Songti SC','SimSun',serif;}
+  img{display:block;max-width:100%;}
+
+  /* ===== 顶部导航 ===== */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px clamp(20px,5vw,64px);
+    background:rgba(27,20,16,.88);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .logo{
+    font-family:'Noto Serif SC',serif;
+    font-weight:900;font-size:20px;letter-spacing:.12em;color:var(--gold);
+    text-decoration:none;
+  }
+  .logo span{color:var(--cream);font-weight:400;font-size:13px;letter-spacing:.3em;margin-left:8px;}
+  .nav-links{display:flex;align-items:center;gap:34px;list-style:none;}
+  .nav-links a{
+    color:var(--muted);text-decoration:none;font-size:14.5px;letter-spacing:.06em;
+    transition:color .25s;
+  }
+  .nav-links a:hover{color:var(--gold);}
+  .btn{
+    display:inline-block;
+    background:var(--terra);color:#fff;
+    border:none;cursor:pointer;
+    font-family:inherit;font-size:14.5px;letter-spacing:.1em;
+    padding:11px 26px;border-radius:999px;
+    transition:background .25s,transform .25s;
+    text-decoration:none;
+  }
+  .btn:hover{background:#d06a3a;transform:translateY(-1px);}
+  .btn-outline{
+    background:transparent;border:1px solid var(--gold);color:var(--gold);
+  }
+  .btn-outline:hover{background:rgba(217,164,65,.12);}
+  .nav-toggle{display:none;background:none;border:none;cursor:pointer;padding:6px;}
+  .nav-toggle svg{stroke:var(--gold);}
+
+  /* ===== Hero ===== */
+  .hero{
+    position:relative;min-height:100vh;
+    display:flex;align-items:center;justify-content:center;text-align:center;
+    overflow:hidden;
+  }
+  .hero-bg{
+    position:absolute;inset:0;width:100%;height:100%;
+    background:url('assets/hero.jpg') center 62%/cover no-repeat;
+  }
+  .hero::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(180deg,rgba(27,20,16,.62) 0%,rgba(27,20,16,.38) 45%,rgba(27,20,16,.92) 100%);
+  }
+  .hero-content{position:relative;z-index:2;padding:120px 24px 90px;max-width:860px;}
+  .eyebrow{
+    display:inline-block;color:var(--gold);
+    letter-spacing:.42em;font-size:13px;margin-bottom:26px;
+    border-top:1px solid var(--gold);border-bottom:1px solid var(--gold);
+    padding:10px 4px;opacity:.95;
+  }
+  .hero h1{
+    font-family:'Noto Serif SC',serif;
+    font-size:clamp(46px,9vw,104px);
+    font-weight:900;letter-spacing:.1em;line-height:1.08;color:#fff;
+    text-shadow:0 4px 40px rgba(0,0,0,.45);
+  }
+  .hero h2{
+    font-size:clamp(15px,2.4vw,20px);font-weight:400;letter-spacing:.34em;
+    color:var(--cream);margin:20px 0 18px;
+  }
+  .hero p{
+    color:#d8c9b2;font-size:clamp(14px,1.7vw,16.5px);
+    max-width:560px;margin:0 auto 40px;font-weight:300;
+  }
+  .hero-cta{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+
+  /* ===== 通用区块 ===== */
+  section{padding:clamp(72px,9vw,120px) clamp(20px,5vw,64px);}
+  .wrap{max-width:1160px;margin:0 auto;}
+  .section-head{text-align:center;margin-bottom:clamp(44px,6vw,72px);}
+  .section-head .zh{
+    font-family:'Noto Serif SC',serif;
+    font-size:clamp(28px,4.4vw,42px);font-weight:900;color:var(--cream);
+    letter-spacing:.06em;
+  }
+  .section-head .es{
+    color:var(--gold);font-size:13px;letter-spacing:.4em;margin-top:14px;
+    text-transform:uppercase;
+  }
+  .section-head::after{
+    content:'';display:block;width:52px;height:2px;background:var(--terra);
+    margin:22px auto 0;
+  }
+
+  /* ===== 关于 ===== */
+  .about-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(32px,5vw,72px);align-items:center;}
+  .about-img{position:relative;}
+  .about-img img{border-radius:6px;width:100%;height:clamp(300px,42vw,520px);object-fit:cover;}
+  .about-img::after{
+    content:'Desde Valencia';position:absolute;left:-14px;bottom:-16px;
+    background:var(--terra);color:#fff;
+    font-size:13px;letter-spacing:.22em;padding:12px 22px;border-radius:4px;
+  }
+  .about-txt .eyebrow-line{color:var(--gold);letter-spacing:.32em;font-size:12.5px;margin-bottom:18px;}
+  .about-txt h3{
+    font-family:'Noto Serif SC',serif;font-size:clamp(24px,3.4vw,34px);
+    font-weight:900;line-height:1.35;margin-bottom:22px;
+  }
+  .about-txt p{color:var(--muted);font-size:15.5px;font-weight:300;margin-bottom:16px;}
+  .about-stats{
+    display:flex;gap:clamp(20px,4vw,52px);margin-top:34px;flex-wrap:wrap;
+  }
+  .stat .num{
+    font-family:'Noto Serif SC',serif;font-size:34px;font-weight:900;color:var(--gold);
+    line-height:1;
+  }
+  .stat .lbl{font-size:13px;color:var(--muted);margin-top:8px;letter-spacing:.08em;}
+
+  /* ===== 招牌菜 ===== */
+  .dishes{background:var(--bg2);}
+  .dish-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;}
+  .dish-card{
+    background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden;
+    display:flex;flex-direction:column;transition:transform .3s,box-shadow .3s;
+  }
+  .dish-card:hover{transform:translateY(-5px);box-shadow:0 16px 40px rgba(0,0,0,.4);}
+  .dish-card img{width:100%;height:230px;object-fit:cover;transition:transform .5s;}
+  .dish-card:hover img{transform:scale(1.05);}
+  .dish-body{padding:20px 20px 24px;display:flex;flex-direction:column;flex:1;}
+  .dish-name{
+    font-family:'Noto Serif SC',serif;font-size:19px;font-weight:700;
+    display:flex;justify-content:space-between;align-items:baseline;gap:10px;
+  }
+  .dish-price{color:var(--gold);font-size:17px;white-space:nowrap;}
+  .dish-desc{color:var(--muted);font-size:13.5px;font-weight:300;margin-top:10px;flex:1;}
+  .dish-tag{
+    margin-top:16px;font-size:11.5px;letter-spacing:.18em;color:var(--terra);
+    border-top:1px dashed var(--line);padding-top:12px;text-transform:uppercase;
+  }
+
+  /* ===== 全宽引句 ===== */
+  .quote{
+    position:relative;text-align:center;
+    padding:clamp(90px,12vw,150px) 24px;
+    background:url('assets/paella.jpg') center/cover no-repeat;
+  }
+  .quote::before{
+    content:'';position:absolute;inset:0;background:rgba(27,20,16,.74);
+  }
+  .quote blockquote{
+    position:relative;max-width:760px;margin:0 auto;
+    font-family:'Noto Serif SC',serif;
+    font-size:clamp(20px,3.4vw,32px);font-weight:700;color:var(--cream);
+    line-height:1.7;
+  }
+  .quote cite{
+    position:relative;display:block;margin-top:24px;font-style:normal;
+    color:var(--gold);font-size:13px;letter-spacing:.34em;
+  }
+
+  /* ===== 菜单 ===== */
+  .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,80px);}
+  .menu-col h4{
+    font-family:'Noto Serif SC',serif;font-size:20px;font-weight:700;color:var(--gold);
+    letter-spacing:.1em;margin-bottom:8px;
+  }
+  .menu-col .sub{font-size:12.5px;color:var(--muted);letter-spacing:.3em;margin-bottom:30px;}
+  .menu-item{
+    display:flex;align-items:baseline;gap:12px;padding:15px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .menu-item .mi-name{font-size:16px;font-weight:500;}
+  .menu-item .mi-es{font-size:12.5px;color:var(--muted);}
+  .menu-item .mi-dots{flex:1;border-bottom:1px dotted rgba(179,164,140,.35);transform:translateY(-4px);}
+  .menu-item .mi-price{color:var(--gold);font-size:16px;font-weight:600;white-space:nowrap;}
+  .menu-note{margin-top:30px;font-size:13px;color:var(--muted);font-weight:300;}
+
+  /* ===== 空间 ===== */
+  .space{background:var(--bg2);}
+  .space-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,72px);align-items:center;}
+  .space-txt h3{
+    font-family:'Noto Serif SC',serif;font-size:clamp(24px,3.4vw,34px);
+    font-weight:900;line-height:1.35;margin-bottom:22px;
+  }
+  .space-txt p{color:var(--muted);font-size:15.5px;font-weight:300;margin-bottom:26px;}
+  .hours{
+    border:1px solid var(--line);border-radius:8px;padding:22px 26px;
+    display:grid;grid-template-columns:auto 1fr;gap:10px 34px;max-width:430px;
+  }
+  .hours dt{color:var(--gold);font-size:13.5px;letter-spacing:.14em;}
+  .hours dd{color:var(--cream);font-size:14.5px;}
+  .space-img img{width:100%;height:clamp(300px,44vw,540px);object-fit:cover;border-radius:6px;}
+
+  /* ===== 预订 ===== */
+  .reserve{text-align:center;}
+  .reserve h3{
+    font-family:'Noto Serif SC',serif;font-size:clamp(26px,4vw,40px);font-weight:900;
+    margin-bottom:14px;
+  }
+  .reserve .r-sub{color:var(--muted);font-size:15px;font-weight:300;max-width:520px;margin:0 auto 44px;}
+  .contact-row{
+    display:flex;gap:clamp(20px,4vw,56px);justify-content:center;flex-wrap:wrap;
+    margin-bottom:44px;
+  }
+  .contact-item{display:flex;align-items:center;gap:12px;color:var(--cream);font-size:15px;}
+  .contact-item svg{stroke:var(--gold);flex-shrink:0;}
+  .reserve form{
+    max-width:620px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:16px;
+  }
+  .reserve input,.reserve select{
+    width:100%;background:var(--card);border:1px solid var(--line);border-radius:6px;
+    color:var(--cream);font-family:inherit;font-size:14.5px;padding:13px 16px;outline:none;
+    transition:border-color .25s;
+  }
+  .reserve input:focus,.reserve select:focus{border-color:var(--gold);}
+  .reserve input::placeholder{color:#8d7f6a;}
+  .reserve .full{grid-column:1/-1;}
+  .reserve .btn{grid-column:1/-1;justify-self:center;margin-top:8px;padding:13px 52px;font-size:15px;}
+  select option{background:var(--card);}
+  .demo-note{margin-top:26px;font-size:12px;color:#7d6f5c;letter-spacing:.08em;}
+
+  /* ===== Footer ===== */
+  footer{
+    border-top:1px solid var(--line);padding:34px clamp(20px,5vw,64px);
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;
+  }
+  footer .f-logo{font-family:'Noto Serif SC',serif;font-weight:900;color:var(--gold);letter-spacing:.14em;font-size:15px;}
+  footer p{color:var(--muted);font-size:12.5px;letter-spacing:.06em;}
+
+  /* ===== Toast ===== */
+  #toast{
+    position:fixed;left:50%;bottom:36px;transform:translateX(-50%) translateY(20px);
+    background:var(--terra);color:#fff;font-size:14px;letter-spacing:.06em;
+    padding:13px 28px;border-radius:999px;opacity:0;pointer-events:none;
+    transition:opacity .35s,transform .35s;z-index:99;box-shadow:0 10px 30px rgba(0,0,0,.4);
+    white-space:nowrap;
+  }
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  /* ===== 响应式 ===== */
+  @media (max-width:960px){
+    .dish-grid{grid-template-columns:repeat(2,1fr);}
+  }
+  @media (max-width:860px){
+    .nav-links{
+      position:fixed;top:0;right:0;height:100vh;width:min(300px,78vw);
+      background:var(--bg2);flex-direction:column;justify-content:center;gap:30px;
+      transform:translateX(100%);transition:transform .35s ease;
+      border-left:1px solid var(--line);z-index:60;
+    }
+    .nav-links.open{transform:translateX(0);}
+    .nav-toggle{display:block;z-index:61;}
+    .nav-cta{margin-left:auto;margin-right:16px;}
+    .about-grid,.space-grid,.menu-grid{grid-template-columns:1fr;}
+    .about-img::after{left:10px;bottom:-14px;}
+    .space-img{order:-1;}
+  }
+  @media (max-width:560px){
+    .dish-grid{grid-template-columns:1fr;}
+    .dish-card img{height:260px;}
+    .reserve form{grid-template-columns:1fr;}
+    .reserve .full{grid-column:1;}
+    .hero h2{letter-spacing:.22em;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto;}
+    *{transition:none!important;animation:none!important;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== 顶部导航 ===== -->
+<nav>
+  <a class="logo" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">SOL Y SOMBRA<span>西班牙餐厅</span></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">关于我们</a></li>
+    <li><a href="#dishes">招牌菜</a></li>
+    <li><a href="#menu">菜单</a></li>
+    <li><a href="#space">餐厅空间</a></li>
+  </ul>
+  <a class="btn nav-cta" href="#reserve">预订座位</a>
+  <button class="nav-toggle" id="navToggle" aria-label="打开菜单" onclick="toggleNav()">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+      <line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/>
+    </svg>
+  </button>
+</nav>
+
+<!-- ===== Hero ===== -->
+<header class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <span class="eyebrow">BIENVENIDOS · 欢迎光临</span>
+    <h1>SOL Y SOMBRA</h1>
+    <h2>阳光与阴影之间 · 一桌西班牙烟火</h2>
+    <p>tapas 小碟、藏红花海鲜饭、36 个月风干的伊比利亚火腿——我们把地中海的热情，端到你的餐桌前。</p>
+    <div class="hero-cta">
+      <a class="btn" href="#reserve">预订座位</a>
+      <a class="btn btn-outline" href="#menu">查看菜单</a>
+    </div>
+  </div>
+</header>
+
+<!-- ===== 关于 ===== -->
+<section id="about">
+  <div class="wrap about-grid">
+    <div class="about-img">
+      <img src="assets/interior.jpg" alt="Sol y Sombra 餐厅内部空间">
+    </div>
+    <div class="about-txt">
+      <div class="eyebrow-line">NUESTRA HISTORIA</div>
+      <h3>一间把太阳端上桌的餐厅</h3>
+      <p>主厨曾在马德里的百年小馆、瓦伦西亚的海边、安达卢西亚的橄榄园里学艺，带着西班牙人对"慢慢吃"的执念回到这里。</p>
+      <p>藏红花、橄榄油、伊比利亚火腿，每晚现煮的 paella——菜单不长，但每一道都像故乡的傍晚那样实在。</p>
+      <div class="about-stats">
+        <div class="stat"><div class="num">17</div><div class="lbl">道手工 Tapas</div></div>
+        <div class="stat"><div class="num">8</div><div class="lbl">年主厨历程</div></div>
+        <div class="stat"><div class="num">36</div><div class="lbl">个月风干火腿</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 招牌菜 ===== -->
+<section class="dishes" id="dishes">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="zh">招牌味道</div>
+      <div class="es">Platos Estrella</div>
+    </div>
+    <div class="dish-grid">
+      <article class="dish-card">
+        <img src="assets/paella.jpg" alt="瓦伦西亚海鲜饭">
+        <div class="dish-body">
+          <div class="dish-name">瓦伦西亚海鲜饭<span class="dish-price">¥168</span></div>
+          <p class="dish-desc">藏红花染金的米饭，配大虾、青口贝与柠檬角，铸铁锅现煮四十分钟。</p>
+          <div class="dish-tag">Paella Valenciana</div>
+        </div>
+      </article>
+      <article class="dish-card">
+        <img src="assets/tapas.jpg" alt="西班牙 tapas 拼盘">
+        <div class="dish-body">
+          <div class="dish-name">Tapas 拼盘<span class="dish-price">¥98</span></div>
+          <p class="dish-desc">伊比利亚火腿、炸鱿鱼圈、腌制橄榄、番茄面包——一小碟一小碟地，像西班牙的夜晚。</p>
+          <div class="dish-tag">Tabla de Tapas</div>
+        </div>
+      </article>
+      <article class="dish-card">
+        <img src="assets/jamon.jpg" alt="伊比利亚火腿">
+        <div class="dish-body">
+          <div class="dish-name">伊比利亚火腿<span class="dish-price">¥128</span></div>
+          <p class="dish-desc">橡果喂养的黑猪，风干 36 个月，薄切配曼彻格奶酪与烤面包。</p>
+          <div class="dish-tag">Jamón Ibérico</div>
+        </div>
+      </article>
+      <article class="dish-card">
+        <img src="assets/sangria.jpg" alt="桑格利亚酒">
+        <div class="dish-body">
+          <div class="dish-name">桑格利亚<span class="dish-price">¥58</span></div>
+          <p class="dish-desc">红葡萄酒浸渍橙子、柠檬与苹果，冰镇一小时后上桌，清爽开胃。</p>
+          <div class="dish-tag">Sangría</div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 全宽引句 ===== -->
+<div class="quote">
+  <blockquote>“米饭在藏红花的汤里慢慢呼吸，<br>就是瓦伦西亚的傍晚。”</blockquote>
+  <cite>— 主厨手记</cite>
+</div>
+
+<!-- ===== 菜单精选 ===== -->
+<section id="menu">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="zh">菜单精选</div>
+      <div class="es">La Carta</div>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-col">
+        <h4>Para Empezar</h4>
+        <div class="sub">前菜与小吃</div>
+        <div class="menu-item"><span class="mi-name">西班牙土豆蛋饼</span><span class="mi-es">Tortilla Española</span><span class="mi-dots"></span><span class="mi-price">¥48</span></div>
+        <div class="menu-item"><span class="mi-name">蒜香橄榄油虾</span><span class="mi-es">Gambas al Ajillo</span><span class="mi-dots"></span><span class="mi-price">¥78</span></div>
+        <div class="menu-item"><span class="mi-name">火腿炸丸子</span><span class="mi-es">Croquetas de Jamón</span><span class="mi-dots"></span><span class="mi-price">¥52</span></div>
+        <div class="menu-item"><span class="mi-name">辣味土豆</span><span class="mi-es">Patatas Bravas</span><span class="mi-dots"></span><span class="mi-price">¥38</span></div>
+        <div class="menu-item"><span class="mi-name">加利西亚章鱼</span><span class="mi-es">Pulpo a la Gallega</span><span class="mi-dots"></span><span class="mi-price">¥88</span></div>
+      </div>
+      <div class="menu-col">
+        <h4>Para Terminar</h4>
+        <div class="sub">甜品与饮品</div>
+        <div class="menu-item"><span class="mi-name">吉拿果配热巧克力</span><span class="mi-es">Churros con Chocolate</span><span class="mi-dots"></span><span class="mi-price">¥42</span></div>
+        <div class="menu-item"><span class="mi-name">西班牙焦糖布丁</span><span class="mi-es">Flan de Huevo</span><span class="mi-dots"></span><span class="mi-price">¥36</span></div>
+        <div class="menu-item"><span class="mi-name">加泰罗尼亚奶油</span><span class="mi-es">Crema Catalana</span><span class="mi-dots"></span><span class="mi-price">¥38</span></div>
+        <div class="menu-item"><span class="mi-name">经典桑格利亚</span><span class="mi-es">Sangría Clásica</span><span class="mi-dots"></span><span class="mi-price">¥58</span></div>
+        <div class="menu-item"><span class="mi-name">苦艾酒</span><span class="mi-es">Vermut Rojo</span><span class="mi-dots"></span><span class="mi-price">¥45</span></div>
+      </div>
+    </div>
+    <p class="menu-note">完整菜单随季节更换，欢迎到店询问当日特色。以上价格为参考示例。</p>
+  </div>
+</section>
+
+<!-- ===== 餐厅空间 ===== -->
+<section class="space" id="space">
+  <div class="wrap space-grid">
+    <div class="space-txt">
+      <div class="eyebrow-line">EL ESPACIO</div>
+      <h3>赤陶拱门下的慢时光</h3>
+      <p>赤陶砖拱、藤编吊灯、午后洒进窗户的阳光——空间和食物一样，带着地中海的温度。适合两人小酌，也容得下一整桌人的热闹。</p>
+      <dl class="hours">
+        <dt>周一至周四</dt><dd>11:30 – 14:00 · 17:30 – 22:00</dd>
+        <dt>周五至周日</dt><dd>11:30 – 15:00 · 17:00 – 23:00</dd>
+        <dt>午间 Tapas 时段</dt><dd>每天 14:00 – 17:00</dd>
+      </dl>
+    </div>
+    <div class="space-img">
+      <img src="assets/hero.jpg" alt="Sol y Sombra 餐桌与西班牙菜">
+    </div>
+  </div>
+</section>
+
+<!-- ===== 预订 ===== -->
+<section class="reserve" id="reserve">
+  <div class="wrap">
+    <h3>今晚，来西班牙坐坐</h3>
+    <p class="r-sub">提前一天预订可预留窗边位。聚餐、生日或包场，欢迎电话与我们聊聊。</p>
+    <div class="contact-row">
+      <div class="contact-item">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        合肥市蜀山区望江西路 888 号
+      </div>
+      <div class="contact-item">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        0551-8888 6666
+      </div>
+      <div class="contact-item">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        每天 11:30 – 23:00
+      </div>
+    </div>
+    <form id="bookForm" onsubmit="return handleBook(event)">
+      <input type="text" placeholder="您的称呼" required>
+      <input type="tel" placeholder="联系电话" required>
+      <input type="date" required>
+      <select required>
+        <option value="" disabled selected>用餐时段</option>
+        <option>午餐 11:30 – 14:00</option>
+        <option>下午茶 14:00 – 17:00</option>
+        <option>晚餐 17:30 – 22:00</option>
+      </select>
+      <input class="full" type="number" min="1" max="20" placeholder="用餐人数（1–20 位）" required>
+      <button class="btn" type="submit">提交预订</button>
+    </form>
+    <p class="demo-note">示例站点：餐厅信息与价格均为虚构，仅用于页面展示。</p>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer>
+  <div class="f-logo">SOL Y SOMBRA</div>
+  <p>© 2026 Sol y Sombra · 西班牙风味餐厅 · 示例页面</p>
+</footer>
+
+<div id="toast"></div>
+
+<script>
+  (function(){
+    var toast = document.getElementById('toast');
+    var timer = null;
+    window.showToast = function(msg){
+      toast.textContent = msg;
+      toast.classList.add('show');
+      if(timer) clearTimeout(timer);
+      timer = setTimeout(function(){ toast.classList.remove('show'); }, 3200);
+    };
+  })();
+
+  window.toggleNav = function(){
+    document.getElementById('navLinks').classList.toggle('open');
+  };
+  document.querySelectorAll('.nav-links a').forEach(function(a){
+    a.addEventListener('click', function(){ document.getElementById('navLinks').classList.remove('open'); });
+  });
+
+  window.handleBook = function(e){
+    e.preventDefault();
+    showToast('预订已收到，我们将尽快与您电话确认');
+    e.target.reset();
+    return false;
+  };
+</script>
+</body>
+</html>
